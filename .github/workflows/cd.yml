@@ -22,13 +22,16 @@ jobs:
         job:
           - os: macos-latest
             os-name: macos
-            binary-postfix: ".a"
+            lib-prefix: "lib"
+            lib-postfix: ".a"
           - os: ubuntu-latest
             os-name: linux
-            binary-postfix: ".a"
+            lib-prefix: "lib"
+            lib-postfix: ".a"
           - os: windows-latest
             os-name: windows
-            binary-postfix: ".lib"
+            lib-prefix: ""
+            lib-postfix: ".lib"
 
     steps:
       - uses: actions/checkout@v4
@@ -53,7 +56,7 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/build
 
-          LIB_NAME=${{matrix.project-name}}${{matrix.job.binary-postfix}}
+          LIB_NAME=${{matrix.job.lib-prefix}}${{matrix.project-name}}${{matrix.job.lib-postfix}}
 
           RELEASE_NAME=${{matrix.project-name}}-${GITHUB_REF/refs\/tags\//}-${{matrix.job.os-name}}-${{matrix.architecture}}
           tar czvf $RELEASE_NAME.tar.gz $LIB_NAME ../includes
